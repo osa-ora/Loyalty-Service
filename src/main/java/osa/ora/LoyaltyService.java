@@ -23,7 +23,12 @@ import javax.ws.rs.Consumes;
 public class LoyaltyService {
 	@Inject
 	LoyaltyDB loyaltyDB;
-
+	/**
+	 * Useless function after adding smallrye-health dependency
+	 * Now you can use: /health/live and /health/ready
+	 * It can be extended to do actual readiness tests
+	 * @return String
+	 */
 	@GET
     @Path("/healthcheck")
     @Produces(MediaType.APPLICATION_JSON)
