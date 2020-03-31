@@ -12,7 +12,7 @@ public class LoyaltyResourceTest {
     @Test
     public void testGetBalance() {
         given()
-          .when().get("/loyalty/balance/100")
+          .when().get("/loyalty/v1/balance/100")
           .then()
              .statusCode(200)
              .body(is("id"));
