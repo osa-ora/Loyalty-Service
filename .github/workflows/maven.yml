@@ -23,6 +23,6 @@ jobs:
     - name: Define env variable
       run: export PORT=8080
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package -DskipTests --file pom.xml
     - name: Building Docker Image
       run: docker build -f src/main/docker/Dockerfile.jvm -t quarkus/loyalty-service-jvm .
