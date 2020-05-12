@@ -32,9 +32,10 @@ public class LoyaltyService {
 	@GET
     @Path("/healthcheck")
     @Produces(MediaType.APPLICATION_JSON)
+	@Deprecated
     public String check() {
 		 return "{\"status\":\"UP\"}";
-	 }
+	}
 	/**
 	 * Get Loyalty account balance
 	 * @param account
