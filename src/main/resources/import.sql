@@ -1,4 +1,4 @@
-DROP SCHEMA `loyalty` ;
+DROP SCHEMA IF EXISTS `loyalty` ;
 
 CREATE SCHEMA `loyalty` ;
 
