@@ -15,7 +15,7 @@ public class LoyaltyResourceTest {
           .when().get("/loyalty/v1/balance/100")
           .then()
              .statusCode(200)
-             .body(is("id"));
+             .body(is("{\"balance\":-1,\"enabled\":false,\"id\":-1,\"tier\":-1}"));
     }
 
 }
