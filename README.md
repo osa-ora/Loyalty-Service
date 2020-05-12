@@ -1,17 +1,21 @@
 # Loyalty Service project
 
-This Project Handle the Basic Loyalty Program Services e.g. create account, add transaction, redeem points, etc.
-The Service connect to MySQL DB and in production mode, it requires the following environment variables:
-PORT = this is the application listening port
-DB_USER = this is the DB user
-DB_PASSWORD = this is the DB user password
-DB_IP = This is the DB IP address
-DB_PORT = This is the DB listening port
+This Project Handle the Basic Loyalty Program Services e.g. create account, add transaction, redeem points, etc.  
+The Service connect to MySQL DB and in production mode, it requires the following environment variables:  
+PORT = this is the application listening port (8080)  
+DB_USER = this is the DB user (loyalty)  
+DB_PASSWORD = this is the DB user password (loyalty)  
+DB_IP = This is the DB IP address, it point to loyaltymysql (need to map to db IP)  
+DB_PORT = This is the DB listening port (3306)  
 
-To run for development: 
-mvn clean compile quarkus:dev
+To run for development:   
 
-Where dev is the development profile.
+```
+mvn clean compile quarkus:dev  
+
+```
+
+Where dev is the development profile.  
 
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
@@ -20,7 +24,8 @@ If you want to learn more about Quarkus, please visit its website: https://quark
 
 ## Running the application in dev mode
 
-You can run your application in dev mode that enables live coding using:
+You can run your application in dev mode that enables live coding using:  
+
 ```
 ./mvnw quarkus:dev
 
