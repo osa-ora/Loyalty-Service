@@ -21,14 +21,20 @@ oc exec $POD_NAME -- mysql -u root loyalty -e "CREATE TABLE loyalty.loyalty_acco
 echo "Press [Enter] to deploy the applications"
 read
 
-oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~https://github.com/osa-ora/Loyalty-Service-Springboot.git --name=loyalty-service -p JAVA_IMAGE_STREAM_TAG=8
-oc expose svc/loyalty-service
+oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java11~https://github.com/osa-ora/Loyalty-Service.git --name=quarkus-loyalty
+oc expose service/quarkus-loyalty
+oc set probe deployment/quarkus-loyalty --liveness --get-url=http://:8080/health/live --initial-delay-seconds=12
+oc set probe deployment/quarkus-loyalty --readiness --get-url=http://:8080/health/ready --initial-delay-seconds=12
 
 oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~https://github.com/osa-ora/Loyalty-Service.git --name=quarkus-loyalty-java
 oc expose service/quarkus-loyalty-java
+oc set probe deployment/quarkus-loyalty-java --liveness --get-url=http://:8080/health/live --initial-delay-seconds=12
+oc set probe deployment/quarkus-loyalty-java --readiness --get-url=http://:8080/health/ready --initial-delay-seconds=12
 
-oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java11~https://github.com/osa-ora/Loyalty-Service.git --name=quarkus-loyalty
-oc expose service/quarkus-loyalty
+oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~https://github.com/osa-ora/Loyalty-Service-Springboot.git --name=loyalty-service -p JAVA_IMAGE_STREAM_TAG=8
+oc expose svc/loyalty-service
+oc set probe deployment/loyalty-service --liveness --get-url=http://:8080/actuator/health --initial-delay-seconds=12
+oc set probe deployment/loyalty-service --readiness --get-url=http://:8080/actuator/health --initial-delay-seconds=12
 
 
 echo "Press [Enter] key to do some testing once the apps deployed successfully ..."
