@@ -48,3 +48,48 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 You can then execute your native executable with: `./target/loyalty-service-1.0.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image-guide.
+
+## Deploy on OpenShift - MySQL
+Run the following commands:
+```
+oc new-project dev
+oc new-app mysql-persistent -p DATABASE_SERVICE_NAME=loyaltymysql -p  MYSQL_ROOT_PASSWORD=loyalty -p MYSQL_DATABASE=loyalty -p MYSQL_USER=loyalty -p MYSQL_PASSWORD=loyalty -p MEMORY_LIMIT=512Mi -p VOLUME_CAPACITY=512Mi
+```
+Once the pod is up and running, run the following commands:
+```
+POD_NAME=$(oc get pods -l=name=loyaltymysql -o custom-columns=POD:.metadata.name --no-headers)
+
+oc exec $POD_NAME -- mysql -u root loyalty -e "CREATE TABLE loyalty.loyalty_account (id INT NOT NULL AUTO_INCREMENT,balance INT NULL,tier INT NULL,enabled TINYINT NULL, PRIMARY KEY (id));CREATE TABLE loyalty.loyalty_transaction (id INT NOT NULL AUTO_INCREMENT,account_id INT NULL, points INT NULL, name VARCHAR(45) NULL, date DATETIME NULL, PRIMARY KEY (id));INSERT INTO loyalty.loyalty_account (id, balance, tier, enabled) VALUES ('1', '333', '1', '1');INSERT INTO loyalty.loyalty_account (id, balance, tier, enabled) VALUES ('2', '122', '1', '1');INSERT INTO loyalty.loyalty_account (id, balance, tier, enabled) VALUES ('3', '100', '2', '1');INSERT INTO loyalty.loyalty_transaction (id, account_id, points, name, date) VALUES ('1', '1', '100', 'KFC', '2019-01-19 14:55:02');INSERT INTO loyalty.loyalty_transaction (id, account_id, points, name, date) VALUES ('2', '1', '80', 'Carrefour', '2020-01-19 14:55:02');INSERT INTO loyalty.loyalty_transaction (id, account_id, points, name, date) VALUES ('3', '1', '75', 'Car Wash', '2020-02-19 14:55:02');INSERT INTO loyalty.loyalty_transaction (id, account_id, points, name, date) VALUES ('4', '2', '110', 'PizzaHut', '2020-01-19 14:55:02');"
+```
+
+## Deploy on OpenShift (Java)
+Run the following script after instantiate the MySQL DB
+```
+oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~https://github.com/osa-ora/Loyalty-Service.git --name=quarkus-loyalty-java
+oc expose service/quarkus-loyalty-java
+```
+To test it:
+```
+curl -s $(oc get route quarkus-loyalty-java -o jsonpath='{.spec.host}')/loyalty/v1/balance/1
+```
+
+## Deploy on OpenShift (Native)
+Run the following script after instantiate the MySQL DB
+```
+oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java11~https://github.com/osa-ora/Loyalty-Service.git --name=quarkus-loyalty
+oc expose service/quarkus-loyalty
+```
+To test it:
+```
+curl -s $(oc get route quarkus-loyalty -o jsonpath='{.spec.host}')/loyalty/v1/balance/1
+```
+
+## Deploy SpingBoot, Quarkus Java and Quarkus Native on OpenShift
+The following script will instantiate the project, DB, deploy all flavours and test them.
+```
+curl https://raw.githubusercontent.com/osa-ora/Loyalty-Service/master/script/quarkus-test.sh > quarkus-test.sh
+chmod +x quarkus-test.sh
+./quarkus-test.sh dev
+```
+
+
