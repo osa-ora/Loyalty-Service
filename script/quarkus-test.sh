@@ -7,7 +7,9 @@ fi
 echo "Please Login to OCP using oc login ..... "
 echo "Make sure oc command is available"
 
+echo "Creating OpenShift project .."
 oc new-project $1
+echo "Creating MySQL database ..."
 oc new-app mysql-persistent -p DATABASE_SERVICE_NAME=loyaltymysql -p  MYSQL_ROOT_PASSWORD=loyalty -p MYSQL_DATABASE=loyalty -p MYSQL_USER=loyalty -p MYSQL_PASSWORD=loyalty -p MEMORY_LIMIT=512Mi -p VOLUME_CAPACITY=512Mi
 
 echo "Press [Enter] key to setup the DB once MySQL pod started successfully ..."
