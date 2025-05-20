@@ -92,7 +92,10 @@ chmod +x quarkus-test.sh
 ./quarkus-test.sh dev
 ```
 
-Network Policy Demo
+---
+---
+
+# Network Policy Demo
 
 
 ```
@@ -136,10 +139,14 @@ curl -s $(oc get route quarkus-loyalty-java -n app-project -o jsonpath='{.spec.h
 
 //with deny all ..
 oc apply -f https://raw.githubusercontent.com/osa-ora/Loyalty-Service/refs/heads/master/np/deny-all.yaml -n db-project
+oc rollout restart deployment quarkus-loyalty-java -n app-project
+
 curl -s $(oc get route quarkus-loyalty-java -n app-project -o jsonpath='{.spec.host}')/loyalty/v1/balance/1
 
 //with permit app to db only ..
 oc apply -f https://raw.githubusercontent.com/osa-ora/Loyalty-Service/refs/heads/master/np/policy.yaml -n db-project
+oc rollout restart deployment quarkus-loyalty-java -n app-project
+
 curl -s $(oc get route quarkus-loyalty-java -n app-project -o jsonpath='{.spec.host}')/loyalty/v1/balance/1
 
 
