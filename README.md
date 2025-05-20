@@ -118,6 +118,9 @@ oc exec $POD_NAME -- mysql -u root loyalty -e "CREATE TABLE loyalty.loyalty_acco
 oc new-project app-project
 oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~https://github.com/osa-ora/Loyalty-Service.git --name=quarkus-loyalty-java -n app-project
 oc set env deployment/quarkus-loyalty-java DB_IP=loyaltymysql.db-project.svc.cluster.local
+// for different port address
+//oc set env deployment/quarkus-loyalty-java DB_PORT=3306
+
 oc expose service/quarkus-loyalty-java -n app-project
 
 oc patch deployment quarkus-loyalty-java -n app-project --type='json' -p='[
