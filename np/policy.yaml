@@ -14,7 +14,7 @@ spec:
               name: app-project
           podSelector:
             matchLabels:
-              deployment: quarkus-loyalty-java
+              app: quarkus-loyalty-java
       ports:
         - protocol: TCP
           port: 3306
